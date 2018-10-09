@@ -1,0 +1,27 @@
+#!/bin/bash
+clear
+cat << MENU
+--------------------------------------------
+Main Menu
+--------------------------------------------
+1. Access a file repository
+2. View Available file repositories
+0. Exit Program
+--------------------------------------------
+MENU
+read choice
+until  [ choice==0 ]; do
+
+if [ choice==1 ]
+then
+echo "MenuTwo()"
+elif [ choice==2 ]
+then
+ls
+else
+echo "Invalid Entry: Please enter 1,2,0"}
+fi
+
+done
+echo "Goodbye"
+exit
