@@ -1,0 +1,109 @@
+#!/bin/bash
+
+#Group 32
+#Paul Ritch - 170011444
+#Joel Sieber - 170016596
+#Alek Roebuck - 160009165
+
+cd
+if test -d Repositories
+then
+cd Repositories 
+else 
+mkdir Repositories; cd Repositories
+fi
+
+while :
+do
+
+clear
+cat << MENU
+--------------------------------------------
+Main Menu
+--------------------------------------------
+1. Access a file repository
+2. View Available file repositories
+3. Create Repository
+0. Exit Program
+--------------------------------------------
+MENU
+read -n1 -s
+case "$REPLY" in
+	"1")echo "Please enter the name of the repository you would like to access"
+	read repository
+	if test -d $repository 
+	then
+	cd $repository
+	else
+	echo "No repository with that name make sure you have created your repository first."
+	fi
+while :
+do
+
+clear
+cat << MENU2
+--------------------------------------------                                                  
+Repository Menu                                                                                         --------------------------------------------                                                       
+1. View list of files         
+2. Log a file out of repository                                                                         3. Log a file into repository         
+4. View log file
+5. Edit file
+0. Return to Main Menu                                                                     
+--------------------------------------------                                                            
+MENU2
+read -n1 -s
+case "$REPLY" in
+        "1") ls ;;
+        "2") echo "Please enter the name of the file you would like to log out"
+	read file
+	if test -f $file
+	then
+	cp $file backups/$file
+	mv $file $file.out
+	else
+	echo "The file has been logged out by another user"
+	fi ;;
+        "3") echo "Please enter the filepath for the file you would like to enter:"
+	read filepath
+	echo "Please enter the name of the file:"
+	read filename
+	if test -f $filename
+	then
+	echo "A file with that name is already in the repository and hasn't been logged out"
+	elif test -f $filename.out
+	then
+	diff $filepath $filename.out >> changelog
+	cp $filepath $filename.out
+	mv $filename.out $filename
+	else	
+	cp $filepath $filename
+	fi ;;
+        "4") cat changelog ;;
+	"5") echo "Please enter the name of the file you would like to edit"
+        read editfile
+        if test -f $editfile
+        then
+        vi $editfile
+        else
+        echo "The file you enter does not exist or is of the wrong type"
+        fi ;;
+	"0") break ;;
+        "*") echo "Invalid Entry: Please enter 1,2,3,4,0" ;;
+esac
+sleep 3
+done ;;
+	"2") ls ;;
+	"3")echo "Please enter the name of the repository you would like to create" 
+	read repository
+	if test -d $repository
+	then
+	echo "A repository with that name already exists"
+	else
+	mkdir $repository; echo "Repository $repository created"
+       	cd $repository; mkdir backups; cd ../	
+	fi ;;
+	"0") echo "Goodbye"; exit ;;
+	"*") echo "Invalid Entry: Please enter 1,2,0" ;;
+esac
+sleep 3
+done
